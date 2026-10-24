@@ -1,181 +1,83 @@
 import type { MemeDef, TextFieldDef } from '../types'
-import Zhdun from './Zhdun.vue'
-import Normalno from './Normalno.vue'
-import Distracted from './Distracted.vue'
-import Drake from './Drake.vue'
-import TwoButtons from './TwoButtons.vue'
-import Brain from './Brain.vue'
-import Cat from './Cat.vue'
-import GenaCheb from './GenaCheb.vue'
-import Hedgehog from './Hedgehog.vue'
-import Sunset from './Sunset.vue'
+import { CUSTOM_ID, customMeme } from './custom'
 
+const BASE = import.meta.env.BASE_URL
 const WHITE = '#ffffff'
 const BLACK = '#000000'
 
-/** Короткий конструктор поля подписи. */
+type Extra = Partial<Omit<TextFieldDef, 'id' | 'label' | 'placeholder' | 'defaultText' | 'x' | 'y' | 'w' | 'fontSize'>>
+
+/** Подпись: белый текст с чёрной обводкой (по умолчанию). */
 function f(
   id: string,
   label: string,
-  placeholder: string,
   defaultText: string,
   x: number,
   y: number,
+  w: number,
   fontSize: number,
-  extra: Partial<TextFieldDef> = {},
+  extra: Extra = {},
 ): TextFieldDef {
-  return { id, label, placeholder, defaultText, x, y, fontSize, color: WHITE, stroke: BLACK, align: 'center', ...extra }
+  return { id, label, placeholder: label, defaultText, x, y, w, fontSize, color: WHITE, stroke: BLACK, align: 'center', rot: 0, ...extra }
 }
 
-const dark = { color: '#1a1a1a', stroke: '#ffffff' }
+/** Подпись на светлой зоне: чёрный текст без обводки. */
+const ink: Extra = { color: BLACK, stroke: '' }
+
+function m(id: string, title: string, description: string, width: number, height: number, fields: TextFieldDef[]): MemeDef {
+  return { id, title, description, src: `${BASE}memes/${id}.jpg`, width, height, fields }
+}
 
 export const memes: MemeDef[] = [
-  {
-    id: 'zhdun',
-    title: 'Ждун',
-    description: 'Бесконечное ожидание: сидишь и ждёшь, а ничего не происходит.',
-    component: Zhdun,
-    width: 600,
-    height: 600,
-    defaultBg: '#cfe3f1',
-    palette: ['#cfe3f1', '#f1e3cf', '#d9f1cf', '#2b2f3a'],
-    fields: [
-      f('top', 'Верхняя подпись', 'Что ждём?', 'ЖДУ ОТВЕТА', 50, 10, 56),
-      f('bottom', 'Нижняя подпись', 'Сколько ждём?', 'ТРЕТИЙ ДЕНЬ', 50, 92, 52),
-    ],
-  },
-  {
-    id: 'eto-normalno',
-    title: 'Это нормально',
-    description: 'Собака в горящей комнате пьёт кофе и делает вид, что всё под контролем.',
-    component: Normalno,
-    width: 600,
-    height: 400,
-    defaultBg: '#f4d9a8',
-    palette: ['#f4d9a8', '#d8e6f4', '#e8d0e8', '#3a2f2f'],
-    fields: [
-      f('top', 'Верхняя подпись', 'Ситуация', 'ДЕДЛАЙН ЗАВТРА', 50, 9, 46),
-      f('bottom', 'Нижняя подпись', 'Реакция', 'ЭТО НОРМАЛЬНО', 50, 93, 50),
-    ],
-  },
-  {
-    id: 'otvlyoksya',
-    title: 'Отвлёкся',
-    description: 'Парень оборачивается на «новое» прямо при своей девушке.',
-    component: Distracted,
-    width: 600,
-    height: 400,
-    defaultBg: '#d6ecd2',
-    palette: ['#d6ecd2', '#f3dcd2', '#d2dcf3', '#2f3a33'],
-    fields: [
-      f('girl', 'Девушка слева', 'Старое', 'СТАРЫЙ ПРОЕКТ', 20, 13, 30),
-      f('guy', 'Парень', 'Я', 'Я', 50, 13, 40),
-      f('other', 'Девушка справа', 'Новое', 'НОВАЯ ИДЕЯ', 80, 13, 30),
-    ],
-  },
-  {
-    id: 'drake',
-    title: 'Дрейк',
-    description: 'Верхний вариант отвергаем, нижний одобряем.',
-    component: Drake,
-    width: 600,
-    height: 600,
-    defaultBg: '#f2c14e',
-    palette: ['#f2c14e', '#8fd3c8', '#f29bb5', '#8aa4ff'],
-    fields: [
-      f('no', 'Не нравится', 'Что отвергаем', 'Делать\nзаранее', 72, 25, 36, dark),
-      f('yes', 'Нравится', 'Что одобряем', 'Делать в ночь\nперед сдачей', 72, 75, 36, dark),
-    ],
-  },
-  {
-    id: 'dve-knopki',
-    title: 'Две кнопки',
-    description: 'Трудный выбор между двумя одинаково привлекательными вариантами.',
-    component: TwoButtons,
-    width: 600,
-    height: 600,
-    defaultBg: '#e5d9f2',
-    palette: ['#e5d9f2', '#d9f2e5', '#f2e5d9', '#2c2a3a'],
-    fields: [
-      f('left', 'Левая кнопка', 'Вариант 1', 'СПАТЬ', 30, 22, 34, dark),
-      f('right', 'Правая кнопка', 'Вариант 2', 'ДОДЕЛАТЬ', 70, 22, 34, dark),
-      f('bottom', 'Подпись внизу', 'Кто выбирает', 'Я В 3 НОЧИ', 50, 94, 44),
-    ],
-  },
-  {
-    id: 'rasshiryayushchiysya-mozg',
-    title: 'Расширяющийся мозг',
-    description: 'Четыре уровня просветления: от простого к космическому.',
-    component: Brain,
-    width: 600,
-    height: 720,
-    defaultBg: '#2d3e5e',
-    palette: ['#2d3e5e', '#4b2d5e', '#2d5e4b', '#111111'],
-    fields: [
-      f('l1', 'Уровень 1', 'Простой вариант', 'Писать код', 30, 12.5, 34),
-      f('l2', 'Уровень 2', 'Вариант чуть умнее', 'Писать тесты', 30, 37.5, 34),
-      f('l3', 'Уровень 3', 'Умный вариант', 'Писать документацию', 30, 62.5, 34),
-      f('l4', 'Уровень 4', 'Космический вариант', 'Не писать ничего', 30, 87.5, 34),
-    ],
-  },
-  {
-    id: 'skeptichny-kot',
-    title: 'Кот «Ну давай, расскажи»',
-    description: 'Скептичный кот в очках не верит ни единому слову.',
-    component: Cat,
-    width: 600,
-    height: 600,
-    defaultBg: '#bfd8e8',
-    palette: ['#bfd8e8', '#e8d8bf', '#d8bfe8', '#30343b'],
-    fields: [
-      f('top', 'Верхняя подпись', 'Что услышал кот', 'НУ ДАВАЙ,', 50, 9, 58),
-      f('bottom', 'Нижняя подпись', 'Продолжение', 'РАССКАЖИ', 50, 92, 58),
-    ],
-  },
-  {
-    id: 'gena-i-cheburashka',
-    title: 'Гена и зверёк',
-    description: 'Диалог зелёного крокодила с гармошкой и большеухого друга.',
-    component: GenaCheb,
-    width: 600,
-    height: 500,
-    defaultBg: '#f7e7b4',
-    palette: ['#f7e7b4', '#c9e7f7', '#f7c9d6', '#2e3a2f'],
-    fields: [
-      f('gena', 'Реплика крокодила', 'Что говорит Гена', 'А давай\nпоспим?', 24, 12, 34, { ...dark, color: '#1b4d2a' }),
-      f('cheb', 'Реплика зверька', 'Что отвечает', 'Давай!\nВ понедельник.', 76, 12, 34, { ...dark, color: '#5a3818' }),
-    ],
-  },
-  {
-    id: 'ezhik-v-tumane',
-    title: 'Ёжик в тумане',
-    description: 'Ёжик с узелком бредёт в тумане: «Какая красивая лошадь…».',
-    component: Hedgehog,
-    width: 600,
-    height: 500,
-    defaultBg: '#aebfc9',
-    palette: ['#aebfc9', '#b9c9ae', '#c9aeb9', '#3a4650'],
-    fields: [
-      f('top', 'Верхняя подпись', 'Фраза', 'Какая красивая лошадь…', 50, 9, 40),
-      f('bottom', 'Нижняя подпись', 'Продолжение', 'Интересно, а что в тумане?', 50, 94, 32),
-    ],
-  },
-  {
-    id: 'klassika',
-    title: 'Классика: сверху и снизу',
-    description: 'Классический формат с крупным Impact-подобным текстом на закате.',
-    component: Sunset,
-    width: 600,
-    height: 400,
-    defaultBg: '#5b3f8c',
-    palette: ['#5b3f8c', '#1f6f8b', '#c0392b', '#1d1d2e'],
-    fields: [
-      f('top', 'Верхний текст', 'Начало шутки', 'КОГДА ПОСЛЕ ДЕПЛОЯ', 50, 12, 48, { font: 'impact' }),
-      f('bottom', 'Нижний текст', 'Конец шутки', 'ВСЁ ВЗОРВАЛОСЬ', 50, 90, 52, { font: 'impact' }),
-    ],
-  },
+  m('drake', 'Дрейк', 'Это нет, а вот это да.', 1200, 1200, [
+    f('no', 'Отвергает', 'Писать код с нуля, когда есть готовая библиотека', 75, 25, 44, 58, { ...ink, align: 'left' }),
+    f('yes', 'Одобряет', 'Скопировать со Stack Overflow и сказать, что так и было', 75, 75, 44, 58, { ...ink, align: 'left' }),
+  ]),
+  m('distracted', 'Неверный парень', 'Верность проекту испытывается новой технологией.', 1200, 800, [
+    f('left', 'Девушка слева', 'Новый модный фреймворк', 29, 76, 26, 46),
+    f('mid', 'Парень', 'Я', 63, 55, 22, 52),
+    f('right', 'Девушка справа', 'Рабочий проект на старом стеке', 85, 14, 28, 40),
+  ]),
+  m('two-buttons', 'Две кнопки', 'Сложный выбор, от которого потеют.', 600, 908, [
+    f('a', 'Левая кнопка', 'Сделать лабу сегодня', 26, 14, 26, 25, { ...ink, rot: -10 }),
+    f('b', 'Правая кнопка', 'Спать до утра', 61, 11, 22, 25, { ...ink, rot: -9 }),
+    f('sweat', 'Подпись снизу', 'Студент за день до дедлайна', 50, 91, 80, 34),
+  ]),
+  m('brain', 'Расширяющийся мозг', 'Четыре уровня просветления.', 857, 1202, [
+    f('l1', 'Уровень 1', 'Писать код в блокноте', 24, 12.4, 44, 44, { ...ink, align: 'left' }),
+    f('l2', 'Уровень 2', 'Писать код в IDE', 24, 37.6, 44, 44, { ...ink, align: 'left' }),
+    f('l3', 'Уровень 3', 'Просить ИИ написать код', 24, 62, 44, 44, { ...ink, align: 'left' }),
+    f('l4', 'Уровень 4', 'Объяснять ИИ, что ты хочешь, так долго, что проще написать самому', 24, 86.7, 44, 40, { ...ink, align: 'left' }),
+  ]),
+  m('this-is-fine', 'Это нормально', 'Всё горит, но мы держимся.', 580, 282, [
+    f('top', 'Сверху', 'Прод лежит, логи красные', 27, 14, 46, 26),
+    f('bottom', 'Снизу', 'Это нормально, это фича', 50, 90, 90, 28),
+  ]),
+  m('woman-cat', 'Женщина и кот', 'Спор, в котором кот невозмутим.', 680, 438, [
+    f('woman', 'Женщина', 'Ты опять сломал билд!', 25, 11, 44, 28, { ...ink }),
+    f('cat', 'Кот', 'У меня на машине работает', 75, 11, 44, 28, { ...ink }),
+  ]),
+  m('waiting-skeleton', 'Скелет в ожидании', 'Всё ещё жду.', 298, 403, [
+    f('top', 'Сверху', 'Жду, пока соберётся проект', 50, 6, 94, 24),
+    f('bottom', 'Снизу', 'Уже третий семестр', 50, 94, 94, 24),
+  ]),
+  m('harold', 'Гарольд скрывает боль', 'Улыбаемся и делаем вид, что всё хорошо.', 480, 601, [
+    f('top', 'Сверху', 'Препод: «Это же элементарно»', 50, 6, 94, 32),
+    f('bottom', 'Снизу', 'Я, не понимая ни слова: «Конечно»', 50, 56, 94, 32),
+  ]),
+  m('grus-plan', 'План Гру', 'Идеальный план с одним небольшим изъяном.', 700, 449, [
+    f('p1', 'Панель 1', 'Выучить новый язык', 37.5, 28, 18, 19, ink),
+    f('p2', 'Панель 2', 'Написать на нём проект', 88, 29, 18, 19, ink),
+    f('p3', 'Панель 3', 'Задеплоить в пятницу вечером', 38, 80, 18, 19, ink),
+    f('p4', 'Панель 4', 'Прод упал, а я в отпуске', 88.5, 80, 18, 19, ink),
+  ]),
+  m('batman-slap', 'Пощёчина Бэтмена', 'Реплика Робина и ответ Бэтмена.', 400, 387, [
+    f('robin', 'Робин', 'А давай без code review?', 25, 12, 38, 21, ink),
+    f('batman', 'Бэтмен', 'Заткнись, Робин!', 75, 10, 38, 22, ink),
+  ]),
 ]
 
 export function getMeme(id: string): MemeDef | undefined {
-  return memes.find((m) => m.id === id)
+  if (id === CUSTOM_ID) return customMeme.value ?? undefined
+  return memes.find((x) => x.id === id)
 }

@@ -6,7 +6,7 @@ import { useDraggable } from '../composables/useDraggable'
 
 const props = defineProps<{
   item: TextItem
-  /** px на единицу viewBox */
+  /** px превью на 1px натуральной ширины картинки */
   scale: number
   selected: boolean
   stage: HTMLElement | null
@@ -24,20 +24,24 @@ const { start } = useDraggable(
 
 const style = computed(() => {
   const size = props.item.fontSize * props.scale
-  return {
+  const st: Record<string, string | number> = {
     left: `${props.item.x}%`,
     top: `${props.item.y}%`,
-    transform: 'translate(-50%, -50%)',
+    width: `${props.item.w}%`,
+    transform: `translate(-50%, -50%) rotate(${props.item.rot}deg)`,
     fontSize: `${size}px`,
     lineHeight: 1.1,
     color: props.item.color,
     fontFamily: fontCss(props.item.font),
-    fontWeight: 800,
+    fontWeight: 700,
     textAlign: props.item.align,
-    WebkitTextStroke: `${Math.max(1, size * 0.14)}px ${props.item.stroke}`,
-    paintOrder: 'stroke fill',
-    textShadow: 'none',
-  } as Record<string, string | number>
+    touchAction: 'none',
+  }
+  if (props.item.stroke) {
+    st.WebkitTextStroke = `${Math.max(1, size * 0.1)}px ${props.item.stroke}`
+    st.paintOrder = 'stroke fill'
+  }
+  return st
 })
 
 function onKey(e: KeyboardEvent) {
@@ -57,9 +61,9 @@ function onKey(e: KeyboardEvent) {
 
 <template>
   <div
-    class="absolute max-w-[96%] cursor-grab select-none whitespace-pre-wrap break-words active:cursor-grabbing focus:outline-none"
-    :class="selected ? 'outline-2 outline-dashed outline-offset-4 outline-indigo-400' : ''"
-    :style="{ ...style, touchAction: 'none', width: 'max-content' }"
+    class="absolute cursor-grab select-none whitespace-pre-wrap break-words active:cursor-grabbing"
+    :class="selected ? 'outline-2 outline-dashed outline-offset-2 outline-[#ff4f1f]' : ''"
+    :style="style"
     tabindex="0"
     role="button"
     :aria-label="`Подпись: ${item.text || 'пустая'}. Перетаскивай или двигай стрелками`"

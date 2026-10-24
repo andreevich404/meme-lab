@@ -1,5 +1,3 @@
-import type { Component } from 'vue'
-
 export type TextAlign = 'left' | 'center' | 'right'
 
 export interface FontOption {
@@ -8,7 +6,12 @@ export interface FontOption {
   css: string
 }
 
-/** Описание поля подписи в мем-шаблоне. x/y — центр блока в процентах, fontSize — в единицах viewBox. */
+/**
+ * Описание поля подписи в мем-шаблоне.
+ * x/y — центр блока в процентах картинки, w — ширина блока в % картинки,
+ * fontSize — в пикселях натуральной ширины картинки, rot — поворот в градусах.
+ * stroke === '' — без обводки.
+ */
 export interface TextFieldDef {
   id: string
   label: string
@@ -16,10 +19,12 @@ export interface TextFieldDef {
   defaultText: string
   x: number
   y: number
+  w: number
   fontSize: number
   color: string
   stroke: string
   align: TextAlign
+  rot: number
   font?: string
 }
 
@@ -29,10 +34,12 @@ export interface TextItem {
   text: string
   x: number
   y: number
+  w: number
   fontSize: number
   color: string
   stroke: string
   align: TextAlign
+  rot: number
   font: string
 }
 
@@ -40,15 +47,12 @@ export interface MemeDef {
   id: string
   title: string
   description: string
-  component: Component
+  src: string
   width: number
   height: number
-  defaultBg: string
-  palette: string[]
   fields: TextFieldDef[]
 }
 
 export interface EditorState {
   items: TextItem[]
-  bg: string
 }

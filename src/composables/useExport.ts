@@ -23,7 +23,7 @@ export function useExport(node: Ref<HTMLElement | null>, prepare?: () => Promise
     }
   }
 
-  const opts = { pixelRatio: 2, cacheBust: true }
+  const opts = { pixelRatio: 2, cacheBust: false }
 
   function download(filename: string) {
     return wrap(async () => {
@@ -31,7 +31,9 @@ export function useExport(node: Ref<HTMLElement | null>, prepare?: () => Promise
       const a = document.createElement('a')
       a.href = url
       a.download = `${filename}.png`
+      document.body.appendChild(a)
       a.click()
+      a.remove()
     }, 'PNG сохранён')
   }
 

@@ -1,4 +1,115 @@
 @import "tailwindcss";
 
-:root { color-scheme: light dark; }
-body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+@theme {
+  --font-display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --font-sans: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+:root {
+  color-scheme: light dark;
+  --bg: #fff6e0;
+  --card: #ffffff;
+  --ink: #141414;
+  --muted: #55504a;
+  --accent: #ff4f1f;
+  --accent-ink: #141414;
+  --pop: #ffd500;
+  --line: #141414;
+  --shadow: 5px 5px 0 0 var(--line);
+  --shadow-sm: 3px 3px 0 0 var(--line);
+  --dur: 150ms;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15120f;
+    --card: #231f1b;
+    --ink: #f6efe4;
+    --muted: #b6ada1;
+    --accent: #ff6a3d;
+    --line: #f6efe4;
+    --shadow: 5px 5px 0 0 #ff6a3d;
+    --shadow-sm: 3px 3px 0 0 #ff6a3d;
+  }
+}
+
+html { background: var(--bg); }
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background:
+    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--ink) 14%, transparent) 1px, transparent 0) 0 0 / 18px 18px,
+    var(--bg);
+  color: var(--ink);
+}
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+.nb-card {
+  background: var(--card);
+  border: 3px solid var(--line);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+}
+
+/* стикерные кнопки */
+.nb-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+  border: 3px solid var(--line);
+  border-radius: .75rem;
+  background: var(--card); color: var(--ink);
+  padding: .5rem .9rem;
+  font-weight: 800; font-size: .875rem; line-height: 1.2;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: transform var(--dur) ease-out, box-shadow var(--dur) ease-out, background-color var(--dur) ease-out;
+}
+.nb-btn:hover:not(:disabled) { transform: translate(-2px, -2px) rotate(-1deg); box-shadow: 5px 5px 0 0 var(--line); }
+.nb-btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 0 0 0 0 var(--line); }
+.nb-btn:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+.nb-btn-accent { background: var(--accent); color: #141414; }
+.nb-btn-pop { background: var(--pop); color: #141414; }
+.nb-btn-danger { background: #ff5d73; color: #141414; }
+
+/* сегментированные контролы */
+.seg { display: flex; border: 3px solid var(--line); border-radius: .75rem; overflow: hidden; background: var(--card); }
+.seg > button {
+  flex: 1; padding: .45rem .5rem; font-size: .8rem; font-weight: 700; color: var(--ink);
+  background: transparent; border: 0; cursor: pointer; min-width: 0;
+  transition: background-color var(--dur) ease-out;
+}
+.seg > button + button { border-left: 3px solid var(--line); }
+.seg > button:hover { background: color-mix(in srgb, var(--accent) 25%, transparent); }
+.seg > button[aria-pressed="true"] { background: var(--accent); color: #141414; }
+.seg > button:focus-visible { outline-offset: -3px; }
+
+.nb-input {
+  width: 100%; border: 3px solid var(--line); border-radius: .75rem;
+  background: var(--card); color: var(--ink); padding: .5rem .75rem; font: inherit; font-size: .9rem;
+}
+.nb-label { display: block; margin-bottom: .3rem; font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.nb-group { border: 3px solid var(--line); border-radius: .9rem; background: color-mix(in srgb, var(--bg) 55%, var(--card)); overflow: hidden; }
+.nb-group > h2 {
+  margin: 0; padding: .45rem .8rem; font-size: .78rem; text-transform: uppercase; letter-spacing: .04em;
+  background: var(--ink); color: var(--bg); border-bottom: 3px solid var(--line);
+}
+.nb-group > div { padding: .8rem; }
+.nb-range { width: 100%; accent-color: var(--accent); height: 1.5rem; }
+
+.sticker {
+  display: inline-block; border: 3px solid var(--line); border-radius: 999px; background: var(--pop); color: #141414;
+  padding: .2rem .8rem; font-weight: 800; font-size: .8rem; box-shadow: var(--shadow-sm); transform: rotate(-3deg);
+}
+
+/* карточки галереи: подъём и наклон */
+.meme-card { transition: transform var(--dur) ease-out, box-shadow var(--dur) ease-out; }
+.meme-card:hover, .meme-card:focus-visible { transform: translate(-3px, -4px) rotate(-1.2deg); box-shadow: 9px 9px 0 0 var(--accent); }
+li:nth-child(even) > .meme-card:hover { transform: translate(-3px, -4px) rotate(1.2deg); }
+
+.hero-title { font-size: clamp(2.1rem, 9vw, 4.75rem); line-height: .98; font-weight: 900; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0ms; }
+  .nb-btn:hover:not(:disabled), .nb-btn:active:not(:disabled),
+  .meme-card:hover, .meme-card:focus-visible, li:nth-child(even) > .meme-card:hover { transform: none; }
+  html { scroll-behavior: auto; }
+}
