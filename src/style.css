@@ -51,6 +51,9 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; }
   box-shadow: var(--shadow);
 }
 
+/* жёлтая карточка: класс вне слоёв Tailwind, иначе .nb-card перебьёт bg-утилиту */
+.nb-card-pop { background: var(--pop); color: #141414; }
+
 /* стикерные кнопки */
 .nb-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: .4rem;

@@ -49,7 +49,7 @@ async function onFile(e: Event) {
         <button
           type="button"
           data-testid="custom-card"
-          class="nb-card meme-card flex h-full min-h-[16rem] w-full cursor-pointer flex-col items-center justify-center gap-3 border-dashed bg-[var(--pop)] p-6 text-center text-[#141414]"
+          class="nb-card nb-card-pop meme-card flex h-full min-h-[16rem] w-full cursor-pointer flex-col items-center justify-center gap-3 border-dashed p-6 text-center"
           aria-label="Свой мем: загрузить картинку"
           @click="fileInput?.click()"
         >

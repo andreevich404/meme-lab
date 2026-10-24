@@ -26,7 +26,7 @@ const meme = computed(() => (memeId.value ? getMeme(memeId.value) : undefined))
     <main class="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:py-8">
       <Editor v-if="meme" :key="meme.id + meme.src" :meme="meme" />
       <template v-else>
-        <p v-if="memeId" class="nb-card mb-5 bg-[var(--pop)] p-3 font-bold text-[#141414]" role="alert">
+        <p v-if="memeId" class="nb-card nb-card-pop mb-5 p-3 font-bold" role="alert">
           {{ memeId === 'custom' ? 'Свой мем нужно загрузить заново: открой «Свой мем» в галерее.' : `Мем «${memeId}» не найден. Выбери другой из галереи.` }}
         </p>
         <Gallery />
