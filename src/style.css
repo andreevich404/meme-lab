@@ -36,9 +36,7 @@ html { background: var(--bg); }
 body {
   margin: 0;
   font-family: var(--font-sans);
-  background:
-    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--ink) 14%, transparent) 1px, transparent 0) 0 0 / 18px 18px,
-    var(--bg);
+  background: var(--bg);
   color: var(--ink);
 }
 h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; }
