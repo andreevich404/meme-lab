@@ -34,7 +34,7 @@ const meme = computed(() => (memeId.value ? getMeme(memeId.value) : undefined))
     </main>
 
     <footer class="border-t-[3px] border-[var(--line)] bg-[var(--card)] py-4 text-center text-sm font-semibold">
-      Лабораторная работа &middot; Мем-лаб
+      Мем-лаб
     </footer>
   </div>
 </template>

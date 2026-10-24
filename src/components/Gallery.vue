@@ -36,7 +36,7 @@ async function onFile(e: Event) {
         препода
       </h1>
       <p class="mt-5 max-w-xl text-base font-medium text-[var(--muted)] sm:text-lg">
-        Выбери шаблон, перетащи подписи, поменяй шрифт и скачай PNG. Всё работает прямо в браузере.
+        Выбери шаблон, перетащи подписи, поменяй шрифт и скачай PNG.
       </p>
     </div>
 
